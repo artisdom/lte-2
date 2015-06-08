@@ -28,6 +28,6 @@ c=0
 loop do
   c+=1
   socket.send (c.to_s.rjust(20,'0') + content), 0, TARGET_IP, TARGET_PORT
-  logit "#101;Send UDP Telegram;#{PKG_SIZE};#{TARGET_IP};#{TARGET_PORT}"
+  logit "#101;Send UDP Telegram;#{c};#{PKG_SIZE};#{TARGET_IP};#{TARGET_PORT}"
   sleep interval
 end
