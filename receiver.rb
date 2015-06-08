@@ -7,12 +7,12 @@ RCV_IP = ARGV[0]
 PORT = ARGV[1]
 
 a=0
-[ RCV_IP, SENDER_IP, PORT ].each do |p|
+[ RCV_IP, PORT ].each do |p|
   raise ArgumentError.new "#{a} argument missing... (RCV_IP, PORT)" if p.nil?
   a+=1
 end
 
-logit "#000;Start Receiver;#{RCV_IP};#{SENDER_IP};#{PORT}"
+logit "#000;Start Receiver;#{RCV_IP};#{PORT}"
 
 socket = UDPSocket.new
 socket.bind RCV_IP, PORT
