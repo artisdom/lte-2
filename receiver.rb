@@ -3,20 +3,19 @@
 require 'socket'
 require_relative 'lte_lib'
 
-BIND_IP = ARGV[0]
-BIND_PORT = ARGV[1]
+RCV_IP = ARGV[0]
+PORT = ARGV[1]
 
 a=0
-[
-  BIND_IP, BIND_PORT
-].each do |p|
-  raise ArgumentError.new "#{a} argument missing..." if p.nil?
+[ RCV_IP, SENDER_IP, PORT ].each do |p|
+  raise ArgumentError.new "#{a} argument missing... (RCV_IP, PORT)" if p.nil?
   a+=1
 end
 
-logit "#000;Start Receiver;#{BIND_IP};#{BIND_PORT}"
+logit "#000;Start Receiver;#{RCV_IP};#{SENDER_IP};#{PORT}"
+
 socket = UDPSocket.new
-socket.bind BIND_IP, BIND_PORT
+socket.bind RCV_IP, PORT
 loop do
   begin
     msg, sender_inet_addr = socket.recvfrom_nonblock(1500)

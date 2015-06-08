@@ -13,7 +13,7 @@ a=0
   TARGET_IP, TARGET_PORT,
   PKG_SIZE, PKG_INTERVAL
 ].each do |p|
-  raise ArgumentError.new "#{a} argument missing..." if p.nil?
+  raise ArgumentError.new "#{a} argument missing... (TARGET_IP, TARGET_PORT, PKG_SIZE, PKG_INTERVAL)" if p.nil?
   a+=1
 end
 
