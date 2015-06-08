@@ -19,11 +19,12 @@ socket.bind RCV_IP, PORT
 loop do
   begin
     msg, sender_inet_addr = socket.recvfrom_nonblock(1500)
+    seq = msg[0..19]
     leng = msg.count 'a'
     send_port = sender_inet_addr[1]
     ip1 = sender_inet_addr[2]
     ip2 = sender_inet_addr[3]
-    logit "#001;Received UDP Telegram;#{leng};#{send_port};#{ip1};#{ip2}"
+    logit "#001;Received UDP Telegram;#{seq.to_i};#{leng};#{send_port};#{ip1};#{ip2}"
   rescue IO::WaitReadable
     IO.select([socket])
     retry
