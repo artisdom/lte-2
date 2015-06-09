@@ -58,7 +58,7 @@ end
 trap('INT') do
   puts 'kill all processes'
   pids.each do |pro|
-    Process.kill('QUIT', pids)
+    Process.kill('QUIT', pro)
   end
 end
 
