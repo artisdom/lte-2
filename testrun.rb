@@ -1,17 +1,23 @@
 #!/usr/bin/env ruby
 
 require 'json'
+require 'fileutils'
+require_relative 'lte_lib'
 
 CONFIG = ARGV[0]
 MODE = ARGV[1]
 
 raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
 
+FileUtils::rm_rf('/tmp/lte_test.log')
+
 s = File.read CONFIG
 data = JSON.parse s
 
 testid = data["TestID"]
 bandwidth = data["bandwidth"]
+
+logit "Test ID: #{testid}"
 
 sender_port = 0
 receiver_port = 0
@@ -66,3 +72,5 @@ pids.each do |p|
   puts "Waiting for #{p}"
   Process.waitpid(p)
 end
+
+`tar cf /tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}.tar /tmp/lte_test.log #{CONFIG}`
