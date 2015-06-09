@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LTE Testrun</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.js"></script>
+    <![endif]-->
+    <style>
+      .entry:not(:first-of-type)
+      {
+        margin-top: 10px;
+      }
+
+      .glyphicon
+      {
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">LTE Testrun</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="status.html">Status</span></a></li>
+            <li><a href="logfiles.html">Logfiles</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="control-group" id="fields">
+          <div class="controls"> 
+            <form role="form" autocomplete="off" class="form-inline">
+              <div>
+                &nbsp;
+              </div>
+              <div class="form-group">
+                <input class="form-control" name="desc" type="text" placeholder="Testrun Description" />
+                <button type="submit" class="btn btn-success">Start Testrun</button>
+              </div>
+              <div>
+                &nbsp;
+              </div>
+              <div>
+                <label class="control-label" for="field1">UDP Streams</label>
+              </div>
+              <div class="entry input-group col-xs-10">
+                <div class="form-group">
+                  <input class="form-control" name="pkgSize[]" type="text" placeholder="size in kb" />
+                </div>
+                <div class="form-group">
+                  <input class="form-control" name="pkgInt[]" type="text" placeholder="interval in sec" />
+                </div>
+                <div class="form-group">
+                  <label class="checkbox-inline">&nbsp;&nbsp;
+                    <input type="checkbox" id="rp[]" value="option1"> Raspi
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="checkbox-inline">&nbsp;&nbsp;
+                    <input type="checkbox" id="qc[]" value="option1"> Cloud
+                  </label>
+                </div>
+                <span class="input-group-btn">
+                  <button class="btn btn-success btn-add" type="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>
+$(function()
+{
+    $(document).on('click', '.btn-add', function(e)
+    {
+        e.preventDefault();
+
+        var controlForm = $('.controls form:first'),
+            currentEntry = $(this).parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+        newEntry.find('input').val('');
+        controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="glyphicon glyphicon-minus"></span>');
+    }).on('click', '.btn-remove', function(e)
+    {
+		$(this).parents('.entry:first').remove();
+
+		e.preventDefault();
+		return false;
+	});
+});
+    </script>
+  </body>
+</html>

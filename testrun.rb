@@ -54,6 +54,11 @@ if MODE == 'rp'
   commands << "./gps.rb /dev/ttyUSB0"
 end
 
+if MODE == 'rp'
+  # setup lte modem logger
+  commands << "./modem.rb /dev/ttyUSB0"
+end
+
 # start all proccesses
 pids = []
 commands.each do |cmd|
