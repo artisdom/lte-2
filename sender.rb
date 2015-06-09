@@ -25,7 +25,7 @@ logit "#100;Start Sender;#{TARGET_IP};#{TARGET_PORT};#{PKG_SIZE};#{PKG_INTERVAL}
 socket = UDPSocket.new
 interval = PKG_INTERVAL.to_f
 content = ("a" * (PKG_SIZE.to_i - 24))
-stream_id = STREAM_ID.rjust '4', '0'
+stream_id = STREAM_ID.rjust 4, '0'
 c=0
 loop do
   c+=1
