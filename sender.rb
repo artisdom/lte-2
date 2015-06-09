@@ -3,19 +3,18 @@
 require 'socket'
 require_relative 'lte_lib'
 
-TARGET_IP = ARGV[0]
-TARGET_PORT = ARGV[1]
-PKG_SIZE = ARGV[2]
-PKG_INTERVAL = ARGV[3]
-STREAM_ID = ARGV[4]
-MODE = ARGV[5]
+TARGET_PORT = ARGV[0]
+PKG_SIZE = ARGV[1]
+PKG_INTERVAL = ARGV[2]
+STREAM_ID = ARGV[3]
+MODE = ARGV[4]
 
 a=0
 [
-  TARGET_IP, TARGET_PORT,
+  TARGET_PORT,
   PKG_SIZE, PKG_INTERVAL, STREAM_ID
 ].each do |p|
-  raise ArgumentError.new "#{a} argument missing... (TARGET_IP, TARGET_PORT, PKG_SIZE, PKG_INTERVAL, STREAM_ID, MODE)" if p.nil?
+  raise ArgumentError.new "#{a} argument missing... (TARGET_PORT, PKG_SIZE, PKG_INTERVAL, STREAM_ID, MODE)" if p.nil?
   a+=1
 end
 if PKG_SIZE.to_i <= 24
@@ -23,14 +22,14 @@ if PKG_SIZE.to_i <= 24
 end
 raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
 
-logit "#100;Start Sender;#{TARGET_IP};#{TARGET_PORT};#{PKG_SIZE};#{PKG_INTERVAL}"
+logit "#100;Start Sender;#{TARGET_PORT};#{PKG_SIZE};#{PKG_INTERVAL}"
 socket = UDPSocket.new
 interval = PKG_INTERVAL.to_f
 content = ("a" * (PKG_SIZE.to_i - 24))
 stream_id = STREAM_ID.rjust 4, '0'
 c=0
 
-target_ip = TARGET_IP
+target_ip = QC_IP
 target_port = TARGET_PORT
 
 if MODE == 'qc'

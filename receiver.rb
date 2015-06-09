@@ -3,21 +3,20 @@
 require 'socket'
 require_relative 'lte_lib'
 
-RCV_IP = ARGV[0]
-PORT = ARGV[1]
-MODE = ARGV[2]
+PORT = ARGV[0]
+MODE = ARGV[1]
 
 a=0
-[ RCV_IP, PORT, MODE ].each do |p|
-  raise ArgumentError.new "#{a} argument missing... (RCV_IP, PORT, MODE)" if p.nil?
+[ PORT, MODE ].each do |p|
+  raise ArgumentError.new "#{a} argument missing... (PORT, MODE)" if p.nil?
   a+=1
 end
 raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
 
-logit "#000;Start Receiver;#{RCV_IP};#{PORT}"
+logit "#000;Start Receiver;#{PORT}"
 
 socket = UDPSocket.new
-socket.bind RCV_IP, PORT
+socket.bind '0.0.0.0', PORT
 
 if MODE == 'rp'
   logit "#003;Poke firewall"
