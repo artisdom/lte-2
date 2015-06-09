@@ -43,8 +43,10 @@ udp_receiver.each do |ud|
   offset += 1
 end
 
-# setup gps logger
-commands << "./gps.rb /dev/ttyUSB0"
+if MODE == 'rp'
+  # setup gps logger
+  commands << "./gps.rb /dev/ttyUSB0"
+end
 
 # start all proccesses
 pids = []
