@@ -17,7 +17,7 @@ data = JSON.parse s
 testid = data["TestID"]
 bandwidth = data["bandwidth"]
 
-logit "Test ID: #{testid}"
+logit "#300;Start Testrun;#{testid}"
 
 sender_port = 0
 receiver_port = 0
@@ -67,15 +67,18 @@ commands.each do |cmd|
 end
 
 trap('INT') do
-  puts 'kill all processes'
+  logit '#301;Kill all processes'
   pids.each do |pro|
+    logit "#304;Kill one process;#{pro}"
     Process.kill('QUIT', pro)
   end
 end
 
 pids.each do |p|
-  puts "Waiting for #{p}"
+  logit "#302;Waiting for Process;#{p}"
   Process.waitpid(p)
 end
 
-`tar cf /tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}.tar /tmp/lte_test.log #{CONFIG}`
+package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}.tar"
+logit "#303;Pack logresults;#{package}"
+`tar cf #{package} /tmp/lte_test.log #{CONFIG}`
