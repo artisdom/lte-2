@@ -49,14 +49,11 @@ if MODE == 'qc'
       retry
     end
   end
-else
-  target_ip = TARGET_IP
-  target_port = TARGET_PORT
 end
-socket = UDPSocket.new
+
 loop do
   c+=1
   socket.send (c.to_s.rjust(20,'0') + stream_id + content), 0, target_ip, target_port
-  logit "#101;Send UDP Telegram;#{c};#{PKG_SIZE};#{TARGET_IP};#{TARGET_PORT}"
+  logit "#101;Send UDP Telegram;#{c};#{PKG_SIZE};#{target_ip};#{target_port}"
   sleep interval
 end
