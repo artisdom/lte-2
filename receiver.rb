@@ -20,7 +20,7 @@ socket = UDPSocket.new
 socket.bind RCV_IP, PORT
 
 if MODE == 'rp'
-  # poke firewall
+  logit "#003;Poke firewall"
   socket.send 'poke', 0, QC_IP, PORT
 end
 
