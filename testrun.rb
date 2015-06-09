@@ -61,3 +61,8 @@ trap('INT') do
     Process.kill('QUIT', pids)
   end
 end
+
+pids.each do |p|
+  puts "Waiting for #{p}"
+  Process.waitpid(p)
+end
