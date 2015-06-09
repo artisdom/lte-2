@@ -1,0 +1,12 @@
+{
+  "TestID": "2015-06-09--13-12",
+  "rpUDP" : [
+    {"pkgSize": 200, "pkgInterval": 0.4},
+    {"pkgSize": 1000, "pkgInterval": 1}
+  ],
+  "qcUDP" : [
+    {"pkgSize": 200, "pkgInterval": 0.4},
+    {"pkgSize": 1000, "pkgInterval": 1}
+  ],
+  "bandwidth": "2000"
+}
