@@ -38,25 +38,25 @@ commands = []
 # setup sender
 stream = 0
 udp_sender.each do |ud|
-  commands << "./sender.rb #{sender_port + stream} #{ud['pkgSize']} #{ud['pkgInterval']} #{stream} #{MODE}"
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/sender.rb #{sender_port + stream} #{ud['pkgSize']} #{ud['pkgInterval']} #{stream} #{MODE}"
   stream += 1
 end
 
 # setup receiver
 offset = 0
 udp_receiver.each do |ud|
-  commands << "./receiver.rb #{receiver_port + offset} #{MODE}"
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/receiver.rb #{receiver_port + offset} #{MODE}"
   offset += 1
 end
 
 if MODE == 'rp'
   # setup gps logger
-  commands << "./gps.rb /dev/ttyUSB0"
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/gps.rb /dev/ttyUSB0"
 end
 
 if MODE == 'rp'
   # setup lte modem logger
-  commands << "./modem.rb /dev/ttyUSB0"
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb /dev/ttyUSB0"
 end
 
 # start all proccesses

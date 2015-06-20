@@ -1,30 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LTE Testrun</title>
-
-    <link href="css/bootstrap.css" rel="stylesheet">
-
-    <!--[if lt IE 9]>
-      <script src="js/html5shiv.js"></script>
-      <script src="js/respond.js"></script>
-    <![endif]-->
-    <style>
-      .entry:not(:first-of-type)
-      {
-        margin-top: 10px;
-      }
-
-      .glyphicon
-      {
-        font-size: 12px;
-      }
-    </style>
-  </head>
-  <body>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -34,12 +7,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html">LTE Testrun</a>
+          <a class="navbar-brand" href="/">LTE Testrun</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="status.html">Status</span></a></li>
-            <li><a href="logfiles.html">Logfiles</span></a></li>
+            <li><a href="/status">Status</span></a></li>
+            <li><a href="/logfiles">Logfiles</span></a></li>
           </ul>
         </div>
       </div>
@@ -49,13 +22,20 @@
       <div class="row">
         <div class="control-group" id="fields">
           <div class="controls"> 
-            <form role="form" autocomplete="off" class="form-inline">
+            <form role="form" autocomplete="off" class="form-inline" action="status" method="post">
               <div>
                 &nbsp;
               </div>
               <div class="form-group">
                 <input class="form-control" name="desc" type="text" placeholder="Testrun Description" />
-                <button type="submit" class="btn btn-success">Start Testrun</button>
+                <input class="form-control" name="bandwidth" type="text" placeholder="Bandwidthstream (MB)" />
+                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                  <select name="bandwithMode[]" size="1" class="form-control">
+                    <option value="uni">Uni-directional</option>
+                    <option value="bi">Bi-directional</option>
+                  </select>&nbsp;&nbsp;
+                </div>
+                <button type="submit" class="btn btn-primary">Start Testrun</button>
               </div>
               <div>
                 &nbsp;
@@ -63,22 +43,24 @@
               <div>
                 <label class="control-label" for="field1">UDP Streams</label>
               </div>
-              <div class="entry input-group col-xs-10">
+              <div class="entry input-group col-xs-11">
                 <div class="form-group">
                   <input class="form-control" name="pkgSize[]" type="text" placeholder="size in kb" />
                 </div>
-                <div class="form-group">
+                <div class="form-group">&nbsp;&nbsp;&nbsp;
                   <input class="form-control" name="pkgInt[]" type="text" placeholder="interval in sec" />
                 </div>
-                <div class="form-group">
-                  <label class="checkbox-inline">&nbsp;&nbsp;
-                    <input type="checkbox" id="rp[]" value="option1"> Raspi
-                  </label>
+                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                  <select name="sender[]" size="1" class="form-control">
+                    <option value="rp">Raspi</option>
+                    <option value="qc">Cloud</option>
+                  </select>
                 </div>
-                <div class="form-group">
-                  <label class="checkbox-inline">&nbsp;&nbsp;
-                    <input type="checkbox" id="qc[]" value="option1"> Cloud
-                  </label>
+                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                  <select name="modem[]" size="1" class="form-control">
+                    <option value="lte1">LTE1</option>
+                    <option value="lte2">LTE2</option>
+                  </select>
                 </div>
                 <span class="input-group-btn">
                   <button class="btn btn-success btn-add" type="button">
@@ -119,5 +101,3 @@ $(function()
 	});
 });
     </script>
-  </body>
-</html>
