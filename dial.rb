@@ -29,3 +29,5 @@ TCPSocket.open('192.168.1.1', 7003) do |s|
   s.puts "AT^NDISDUP=1,1,\"cmnet\"\r\n"
   s.expect '^NDISSTAT'
 end
+
+`udhcpc -i wwan0`

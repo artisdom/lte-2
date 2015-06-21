@@ -1,12 +1,13 @@
 {
-  "TestID": "2015-06-09--13-12",
-  "rpUDP" : [
-    {"pkgSize": 200, "pkgInterval": 0.4},
-    {"pkgSize": 1000, "pkgInterval": 1}
+  "TestID":"ring2_on_2015_06_27",
+  "bandwidth":2,
+  "bandwidthMode":"uni",
+  "rp": [
+    {"pkgSize":"100","pkgInt":"1","modem":"lte1"},
+    {"pkgSize":"1000","pkgInt":"2","modem":"lte1"}
   ],
-  "qcUDP" : [
-    {"pkgSize": 200, "pkgInterval": 0.4},
-    {"pkgSize": 1000, "pkgInterval": 1}
-  ],
-  "bandwidth": "2000"
+  "qc": [
+    {"pkgSize":"100","pkgInt":"1","modem":"lte1"},
+    {"pkgSize":"1000","pkgInt":"2","modem":"lte1"}
+  ]
 }
