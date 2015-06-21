@@ -12,7 +12,9 @@ SERVER_IP_2 = ARGV[4]
 
 raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
 
-FileUtils::rm_rf('/tmp/lte_test.log')
+File.open("/tmp/lte_test.log", 'w') do |f|
+  f.print ''
+end
 
 s = File.read CONFIG
 data = JSON.parse s
@@ -77,12 +79,15 @@ if MODE == 'rp'
   commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb"
 end
 
+=begin
+# we don't need the dial in, we dial up before the start
 if MODE == 'rp'
   # dial up modem
   cmd = "#{File.dirname(File.expand_path(__FILE__))}/dial.rb"
   `#{cmd}`
   logit "#306;Dialup modem;#{cmd}"
 end
+=end
 
 # start all proccesses
 pids = []
@@ -108,4 +113,4 @@ end
 
 package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.tar"
 logit "#303;Pack logresults;#{package}"
-`tar cf "#{package}" /tmp/lte_test.log #{CONFIG}`
+`tar czf "#{package}" /tmp/lte_test.log #{CONFIG}`
