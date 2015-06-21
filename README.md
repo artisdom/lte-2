@@ -12,6 +12,7 @@
 - 200 = Start GPS Logger
 - 201 = GPS Coordinates
 - 202 = GPS Speed in km/h
+- 203 = GPS raw output
 
 - 300 = Start Testrun
 - 301 = Kill all processes
@@ -20,3 +21,6 @@
 - 304 = Kill one process
 
 - 400 = Start LTE Modem Logger
+- 401 = RSSI value
+- 402 = Signal in dbm
+- 403 = Cell Tower and location id
