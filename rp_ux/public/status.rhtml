@@ -1,5 +1,32 @@
 <% servlet_response['Content-Type'] = 'text/html' %>
+<%
+  @c = {}
+  params = servlet_request.body.gsub('%5B', '[').gsub('%5D', ']').split('&').map{|x|x.split('=')}
+  @c["TestID"] = ''
+  @c["bandwidth"] = ''
+  @c["bandwidthMode"] = ''
+  @c["rp"] = []
+  @c["qc"] = []
 
+  c2 = {}
+
+  params.each do |i|
+    unless c2.has_key? i[0]
+      c2[i[0]] = [i[1]]
+    else
+      c2[i[0]] << i[1]
+    end
+  end
+  @c["TestID"] = c2["desc"][0].to_s
+  @c["bandwidth"] = c2["bandwidth"][0].to_i
+  @c["bandwidthMode"] = c2["bandwidthMode"][0].to_s
+  c2["pkgSize[]"].size.times do |i|
+    k = c2["sender[]"][i]
+    @c[k] << {'pkgSize' => c2["pkgSize[]"][i],
+              'pkgInt' => c2["pkgInt[]"][i],
+              'modem' => c2["modem[]"][i]}
+  end
+ %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -55,7 +82,7 @@
         </table>
       </div>
     </div>
-
+    <%= @c.inspect %>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
   </body>
