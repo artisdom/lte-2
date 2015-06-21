@@ -8,6 +8,7 @@ PKG_SIZE = ARGV[1]
 PKG_INTERVAL = ARGV[2]
 STREAM_ID = ARGV[3]
 MODE = ARGV[4]
+SERVER_IP = ARGV[5]
 
 a=0
 [
@@ -29,7 +30,7 @@ content = ("a" * (PKG_SIZE.to_i - 24))
 stream_id = STREAM_ID.rjust 4, '0'
 c=0
 
-target_ip = QC_IP
+target_ip = SERVER_IP
 target_port = TARGET_PORT
 
 if MODE == 'qc'
