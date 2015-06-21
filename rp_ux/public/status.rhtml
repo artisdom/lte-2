@@ -1,5 +1,7 @@
 <% servlet_response['Content-Type'] = 'text/html' %>
 <%
+  require 'json'
+
   @c = {}
   params = servlet_request.body.gsub('%5B', '[').gsub('%5D', ']').split('&').map{|x|x.split('=')}
   @c["TestID"] = ''
@@ -26,6 +28,8 @@
               'pkgInt' => c2["pkgInt[]"][i],
               'modem' => c2["modem[]"][i]}
   end
+
+  File.open('/tmp/testrun.json', 'w') {|f| f.puts @c.to_json}
  %>
 <!DOCTYPE html>
 <html lang="en">

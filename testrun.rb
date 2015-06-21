@@ -48,7 +48,7 @@ udp_sender.each do |ud|
     s_ip = SERVER_IP_2
   end
   if (ud['modem'] == 'lte1' and SERVER_IDX == '1') or (ud['modem'] == 'lte2' and SERVER_IDX == '2') or MODE == 'rp'
-    commands << "#{File.dirname(File.expand_path(__FILE__))}/sender.rb #{sender_port + stream} #{ud['pkgSize']} #{ud['pkgInterval']} #{stream} #{MODE} #{s_ip}"
+    commands << "#{File.dirname(File.expand_path(__FILE__))}/sender.rb #{sender_port + stream} #{ud['pkgSize']} #{ud['pkgInt']} #{stream} #{MODE} #{s_ip}"
   end
   stream += 1
 end
