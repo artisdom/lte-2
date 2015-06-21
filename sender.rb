@@ -15,7 +15,7 @@ a=0
   TARGET_PORT,
   PKG_SIZE, PKG_INTERVAL, STREAM_ID
 ].each do |p|
-  raise ArgumentError.new "#{a} argument missing... (TARGET_PORT, PKG_SIZE, PKG_INTERVAL, STREAM_ID, MODE)" if p.nil?
+  raise ArgumentError.new "#{a} argument missing... (TARGET_PORT, PKG_SIZE, PKG_INTERVAL, STREAM_ID, MODE, SERVER_IP)" if p.nil?
   a+=1
 end
 if PKG_SIZE.to_i <= 24

@@ -5,10 +5,11 @@ require_relative 'lte_lib'
 
 PORT = ARGV[0]
 MODE = ARGV[1]
+SERVER_IP = ARGV[2]
 
 a=0
 [ PORT, MODE ].each do |p|
-  raise ArgumentError.new "#{a} argument missing... (PORT, MODE)" if p.nil?
+  raise ArgumentError.new "#{a} argument missing... (PORT, MODE, SERVER_IP)" if p.nil?
   a+=1
 end
 raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
@@ -20,7 +21,7 @@ socket.bind '0.0.0.0', PORT
 
 if MODE == 'rp'
   logit "#003;Poke firewall"
-  socket.send 'poke', 0, QC_IP, PORT
+  socket.send 'poke', 0, SERVER_IP, PORT
 end
 
 loop do
