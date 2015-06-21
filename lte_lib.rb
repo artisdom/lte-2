@@ -1,4 +1,4 @@
-$D = true
+$D = false
 
 QC_IP = '172.20.100.1'
 TESTRUN_CONFIG = '/tmp/testrun.json'
