@@ -28,7 +28,7 @@ s = File.read CONFIG
 data = JSON.parse s
 
 testid = data["TestID"]
-bandwidth = data["bandwidth"]
+bandwidth = data["bandwidth"].to_i
 
 logit "#300;Start Testrun;#{testid}"
 
@@ -85,6 +85,11 @@ end
 if MODE == 'rp'
   # setup lte modem logger
   commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb"
+end
+
+if bandwidth == 1
+  # Bandwidth test
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/bandwidth.rb #{MODE}"
 end
 
 =begin
