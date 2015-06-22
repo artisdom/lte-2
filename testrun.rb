@@ -16,6 +16,14 @@ File.open("/tmp/lte_test.log", 'w') do |f|
   f.print ''
 end
 
+File.open("/tmp/testrun.pid", 'w') do |f|
+  f.print Process.pid
+end
+
+File.open("/tmp/testrun.state", 'w') do |f| 
+  f.print 'init'
+end
+
 s = File.read CONFIG
 data = JSON.parse s
 
@@ -98,11 +106,11 @@ commands.each do |cmd|
   logit "#305;Spawn Process;#{p};#{cmd}"
 end
 
-trap('INT') do
+trap('TERM') do
   logit '#301;Kill all processes'
   pids.each do |pro|
     logit "#304;Kill one process;#{pro}"
-    Process.kill('QUIT', pro)
+    Process.kill('TERM', pro)
   end
 end
 
@@ -111,6 +119,6 @@ pids.each do |p|
   Process.waitpid(p)
 end
 
-package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.tar"
+package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.#{MODE}.tar.gz"
 logit "#303;Pack logresults;#{package}"
 `tar czf "#{package}" /tmp/lte_test.log #{CONFIG}`

@@ -30,6 +30,11 @@
   end
 
   File.open('/tmp/testrun.json', 'w') {|f| f.puts @c.to_json}
+
+  spawn('/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 119.254.210.30 119.254.100.105')
+
+  @pid = File.open('/tmp/testrun.pid').read
+  @state = File.open('/tmp/testrun.state').read
  %>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,7 +91,6 @@
         </table>
       </div>
     </div>
-    <%= @c.inspect %>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
   </body>

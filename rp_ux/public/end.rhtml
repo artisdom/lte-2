@@ -1,10 +1,11 @@
 <% servlet_response['Content-Type'] = 'text/html' %>
 <%
+  @pid = File.open('/tmp/testrun.pid').read
+  @state = File.open('/tmp/testrun.state').read
   if servlet_request.request_method == "POST"
-    require 'timeout'
-    Timeout::timeout(10) {
-      @log = `/usr/bin/ruby /app/lte/dial.rb`
-    }
+    Process.kill(:TERM, @pid.to_i)
+    sleep 5
+    `mv /tmp/*.rp.tar.gz /mnt/sda1/`
   end
 %>
 <!DOCTYPE html>
