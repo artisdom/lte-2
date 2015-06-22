@@ -1,36 +1,12 @@
 <% servlet_response['Content-Type'] = 'text/html' %>
 <%
-  require 'json'
-
-  @c = {}
-  params = servlet_request.body.gsub('%5B', '[').gsub('%5D', ']').split('&').map{|x|x.split('=')}
-  @c["TestID"] = ''
-  @c["bandwidth"] = ''
-  @c["bandwidthMode"] = ''
-  @c["rp"] = []
-  @c["qc"] = []
-
-  c2 = {}
-
-  params.each do |i|
-    unless c2.has_key? i[0]
-      c2[i[0]] = [i[1]]
-    else
-      c2[i[0]] << i[1]
-    end
+  if servlet_request.request_method == "POST"
+    require 'timeout'
+    Timeout::timeout(10) {
+      @log = `/usr/bin/ruby /app/lte/dial.rb`
+    }
   end
-  @c["TestID"] = c2["desc"][0].to_s
-  @c["bandwidth"] = c2["bandwidth"][0].to_i
-  @c["bandwidthMode"] = c2["bandwidthMode"][0].to_s
-  c2["pkgSize[]"].size.times do |i|
-    k = c2["sender[]"][i]
-    @c[k] << {'pkgSize' => c2["pkgSize[]"][i],
-              'pkgInt' => c2["pkgInt[]"][i],
-              'modem' => c2["modem[]"][i]}
-  end
-
-  File.open('/tmp/testrun.json', 'w') {|f| f.puts @c.to_json}
- %>
+%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -79,14 +55,16 @@
     </nav>
 
     <div class="container">
+      <form role="form" autocomplete="off" class="form-inline" action="end.rhtml" method="post">
+         <button type="submit" class="btn btn-primary">End Testrun</button>
+      </form>
       <div class="row">
         <table class="table">
         <tr><th>PID</th><td><%= @pid %></td></tr>
-        <tr><th>Status</th><td><%= @status %></td></tr>
+        <tr><th>State</th><td><%= @state %></td></tr>
         </table>
       </div>
     </div>
-    <%= @c.inspect %>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
   </body>
