@@ -6,14 +6,15 @@ MODE = ARGV[0]
 
 raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
 
-logit "#500;Start Bandwidth;#{BANDWIDTH}"
+logit "#500;Start Bandwidth;"
 
 if MODE == 'qc'
-  IO.popen('iperf -s -p 9999') do |p|
-    puts p
+  loop do
+    `iperf -s -p 9999`
   end
 else
-  IO.popen('iperf -c 119.254.210.30 -p 9999') do |p|
-    puts p
+  loop do
+    result = `iperf -c 119.254.210.30 -p 9999`
+    logit "#501;Bandwidth result;#{result.lines.last}"
   end
 end
