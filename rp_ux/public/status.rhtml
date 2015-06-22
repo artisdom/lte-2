@@ -31,6 +31,12 @@
 
   File.open('/tmp/testrun.json', 'w') {|f| f.puts @c.to_json}
 
+  # deploy testrun config remotely
+  `scp /tmp/testrun.json 119.254.210.30:/tmp/testrun.json`
+  # start remote testrun
+  spawn('ssh 119.254.210.30 "/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 119.254.210.30 119.254.100.105"')
+  sleep 20
+  # start local testrun
   spawn('/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 119.254.210.30 119.254.100.105')
 
   @pid = File.open('/tmp/testrun.pid').read

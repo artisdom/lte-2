@@ -3,9 +3,18 @@
   @pid = File.open('/tmp/testrun.pid').read
   @state = File.open('/tmp/testrun.state').read
   if servlet_request.request_method == "POST"
+    # kill local testrun process
     Process.kill(:TERM, @pid.to_i)
+    # get remote testrun process id
+    r_pid = `ssh 119.254.210.30 cat /tmp/testrun.pid`
+    # kill remote testrun process
+    `ssh 119.254.210.30 kill -TERM #{r_pid}`
+    # wait to write the logfiles down
     sleep 5
+    # save local logfiles
     `mv /tmp/*.rp.tar.gz /mnt/sda1/`
+    # save remote logfiles
+    `scp 119.254.210.30:/tmp/*.qc.tar.gz /mnt/sda1/`
   end
 %>
 <!DOCTYPE html>
