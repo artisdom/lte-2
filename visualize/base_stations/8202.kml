@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Placemark>
+    <name>8202</name>
+    <description>Cell Tower 8202 with best signal value -64</description>
+    <Point>
+      <coordinates>116.502632,39.98893783333333,500</coordinates>
+    </Point>
+  </Placemark>
+</kml>
