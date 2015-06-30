@@ -14,12 +14,14 @@ File.open(log).each_line do |l|
     minute = "#{m[2]}.#{m[3]}".to_f
     hem = a[4]
     lat = degree + (minute / 60)
+    lat = -lat if hem == 'S'
 
     m = a[5].match /^(.*?)(..)\.(.*?)$/
     degree = m[1].to_i
     minute = "#{m[2]}.#{m[3]}".to_f
     hem = a[6]
     long = degree + (minute / 60)
+    long = -long if hem == 'W'
 
     coord = "#{long},#{lat}"
   elsif l =~ /#402/
