@@ -44,8 +44,7 @@
     # deploy testrun config remotely
     `scp "/tmp/testrun.json" "#{QC_IP_1}:/tmp/"`
     # start remote testrun
-    spawn('ssh #{QC_IP_1} "/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2}"')
-    sleep 20
+    `ssh #{QC_IP_1} "/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2} &"`
     # start local testrun
     spawn('/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 #{QC_IP_1} #{QC_IP_2}')
   rescue
