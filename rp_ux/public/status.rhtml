@@ -1,46 +1,63 @@
 <% servlet_response['Content-Type'] = 'text/html' %>
 <%
   require 'json'
+  @log = ''
 
-  @c = {}
-  params = servlet_request.body.gsub('%5B', '[').gsub('%5D', ']').split('&').map{|x|x.split('=')}
-  @c["TestID"] = ''
-  @c["bandwidth"] = ''
-  @c["bandwidthMode"] = ''
-  @c["rp"] = []
-  @c["qc"] = []
+  begin
+    @c = {}
+    params = servlet_request.body.gsub('%5B', '[').gsub('%5D', ']').split('&').map{|x|x.split('=')}
+    @c["TestID"] = ''
+    @c["bandwidth"] = ''
+    @c["bandwidthMode"] = ''
+    @c["rp"] = []
+    @c["qc"] = []
 
-  c2 = {}
+    c2 = {}
 
-  params.each do |i|
-    unless c2.has_key? i[0]
-      c2[i[0]] = [i[1]]
-    else
-      c2[i[0]] << i[1]
+    params.each do |i|
+      unless c2.has_key? i[0]
+        c2[i[0]] = [i[1]]
+      else
+        c2[i[0]] << i[1]
+      end
     end
+    @c["TestID"] = c2["desc"][0].to_s
+    @c["bandwidth"] = c2["bandwidth"][0].to_i
+    @c["bandwidthMode"] = c2["bandwidthMode"][0].to_s
+    c2["pkgSize[]"].size.times do |i|
+      k = c2["sender[]"][i]
+      @c[k] << {'pkgSize' => c2["pkgSize[]"][i],
+                'pkgInt' => c2["pkgInt[]"][i],
+                'modem' => c2["modem[]"][i]}
+    end
+  rescue
+    @log << '; error during loading of config parameters'
   end
-  @c["TestID"] = c2["desc"][0].to_s
-  @c["bandwidth"] = c2["bandwidth"][0].to_i
-  @c["bandwidthMode"] = c2["bandwidthMode"][0].to_s
-  c2["pkgSize[]"].size.times do |i|
-    k = c2["sender[]"][i]
-    @c[k] << {'pkgSize' => c2["pkgSize[]"][i],
-              'pkgInt' => c2["pkgInt[]"][i],
-              'modem' => c2["modem[]"][i]}
+
+  begin
+    File.open('/tmp/testrun.json', 'w') {|f| f.puts @c.to_json}
+  rescue
+    @log << '; error during reading of testrun config'
   end
 
-  File.open('/tmp/testrun.json', 'w') {|f| f.puts @c.to_json}
+  begin
+    # deploy testrun config remotely
+    `scp "/tmp/testrun.json" "119.254.210.30:/tmp/"`
+    # start remote testrun
+    spawn('ssh 119.254.210.30 "/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 119.254.210.30 119.254.100.105"')
+    sleep 20
+    # start local testrun
+    spawn('/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 119.254.210.30 119.254.100.105')
+  rescue
+    @log << '; error during deployment of testconfig in remote location'
+  end
 
-  # deploy testrun config remotely
-  `scp "/tmp/testrun.json" "119.254.210.30:/tmp/"`
-  # start remote testrun
-  spawn('ssh 119.254.210.30 "/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 119.254.210.30 119.254.100.105"')
-  sleep 20
-  # start local testrun
-  spawn('/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 119.254.210.30 119.254.100.105')
-
-  @pid = File.open('/tmp/testrun.pid').read
-  @state = File.open('/tmp/testrun.state').read
+  begin
+    @pid = File.open('/tmp/testrun.pid').read
+    @state = File.open('/tmp/testrun.state').read
+  rescue
+    @log << '; error during reading of state' 
+  end
  %>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,6 +111,7 @@
         <table class="table">
         <tr><th>PID</th><td><%= @pid %></td></tr>
         <tr><th>Status</th><td><%= @status %></td></tr>
+        <tr><th>Log</th><td><%= @log %></td></tr>
         </table>
       </div>
     </div>
