@@ -16,5 +16,6 @@ else
   loop do
     result = `iperf -c 119.254.210.30 -p 9999`
     logit "#501;Bandwidth result;#{result.lines.last}"
+    sleep 1
   end
 end
