@@ -1,4 +1,5 @@
 require 'webrick'
+require "#{File.dirname(File.expand_path(__FILE__))}/../lte_lib"
 
 include WEBrick
 
