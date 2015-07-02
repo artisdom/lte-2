@@ -128,7 +128,7 @@ File.open("/tmp/testrun.state", 'w') do |f|
   f.print 'packing'
 end
 
-package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.#{MODE}.tar.gz"
+package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.#{MODE}.#{SERVER_IDX}.tar.gz"
 logit "#303;Pack logresults;#{package}"
 `tar czf "#{package}" /tmp/lte_test.log #{CONFIG}`
 
