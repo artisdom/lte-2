@@ -30,7 +30,7 @@ data = JSON.parse s
 testid = data["TestID"]
 bandwidth = data["bandwidth"].to_i
 
-logit "#300;Start Testrun;#{testid}"
+logit "#300;Start Testrun;#{testid};#{Process.pid};#{Process.ppid}"
 
 sender_port = 0
 receiver_port = 0
