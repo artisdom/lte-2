@@ -24,7 +24,14 @@ if MODE == 'rp'
   socket.send 'poke', 0, SERVER_IP, PORT
 end
 
+last_poke = Time.now
 loop do
+  # every minute poke the firewall
+  if ((Time.now - last_poke) > 60) and MODE == 'rp'
+    logit "#004;Re-Poke firewall"
+    socket.send 'poke', 0, SERVER_IP, PORT
+  end
+
   begin
     msg, sender_inet_addr = socket.recvfrom_nonblock(1500)
     seq = msg[0..19]

@@ -55,5 +55,20 @@ loop do
   c+=1
   socket.send (c.to_s.rjust(20,'0') + stream_id + content), 0, target_ip, target_port
   logit "#101;Send UDP Telegram;#{c};#{PKG_SIZE};#{target_ip};#{target_port}"
+
+  if MODE == 'qc'
+    # check if new poke arrived
+    begin
+      msg, sender_inet_addr = socket.recvfrom_nonblock(1500)
+      if msg == 'poke'
+        target_port = sender_inet_addr[1]
+        target_ip = sender_inet_addr[2]
+        logit "#103;Firewall re-poke received;#{target_ip};#{target_port}"
+      end
+    rescue IO::WaitReadable
+      IO.select([socket])
+    end
+  end
+
   sleep interval
 end
