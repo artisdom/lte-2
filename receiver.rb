@@ -30,6 +30,7 @@ loop do
   if ((Time.now - last_poke) > 60) and MODE == 'rp'
     logit "#004;Re-Poke firewall"
     socket.send 'poke', 0, SERVER_IP, PORT
+    last_poke = Time.now
   end
 
   begin

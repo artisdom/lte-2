@@ -56,6 +56,8 @@ loop do
   socket.send (c.to_s.rjust(20,'0') + stream_id + content), 0, target_ip, target_port
   logit "#101;Send UDP Telegram;#{c};#{PKG_SIZE};#{target_ip};#{target_port}"
 
+  sleep interval
+
   if MODE == 'qc'
     # check if new poke arrived
     begin
@@ -66,9 +68,6 @@ loop do
         logit "#103;Firewall re-poke received;#{target_ip};#{target_port}"
       end
     rescue IO::WaitReadable
-      IO.select([socket])
     end
   end
-
-  sleep interval
 end
