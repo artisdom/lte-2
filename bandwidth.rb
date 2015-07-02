@@ -14,7 +14,7 @@ if MODE == 'qc'
   end
 else
   loop do
-    result = `iperf -c 119.254.210.30 -p 9999`
+    result = `iperf -c 119.254.210.30 -u -b 6M -p 9999`
     logit "#501;Bandwidth result;#{result.lines.last}"
     sleep 1
   end

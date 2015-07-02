@@ -44,9 +44,10 @@
     # deploy testrun config remotely
     `scp "/tmp/testrun.json" "#{QC_IP_1}:/tmp/"`
     # start remote testrun
-    `ssh #{QC_IP_1} "/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2} &"`
+    spawn("ssh #{QC_IP_1} \"/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2} \"")
+    sleep 10
     # start local testrun
-    spawn('/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 #{QC_IP_1} #{QC_IP_2}')
+    spawn("/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 #{QC_IP_1} #{QC_IP_2}")
   rescue
     @log << '; error during deployment of testconfig in remote location'
   end

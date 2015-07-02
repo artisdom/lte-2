@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'timeout'
+require 'expect'
 require 'socket'
 require_relative 'lte_lib'
 
@@ -12,7 +14,7 @@ TCPSocket.open('192.168.1.1', 7003) do |s|
   loop do
     begin
        begin
-       c = s.read_nonblock(1)
+         c = s.read_nonblock(1)
        rescue
          retry
        end
@@ -30,6 +32,26 @@ TCPSocket.open('192.168.1.1', 7003) do |s|
            when /^\+CREG/
              a = l.split ','
              logit "#403;Modem Cell Tower;#{a[2]};#{a[3]}"
+	     s.print "AT^HCSQ?\r\n"
+	   when /^\^HCSQ:/
+	     a = l
+	     logit "#404;Modem Signal Details;#{a}"
+#	     r = `ping -c1 #{QC_IP_1} 2>&1`
+#	     if r =~ /Network is unreachable/
+#	       Timeout::timeout(5) {
+#	         # dial up
+#	         s.print "ATZ\r\n"
+#	         s.expect 'OK'
+#	         s.print "ATQ0 V1 E1 S0=0\r\n"
+#	         s.expect 'OK'
+#	         s.puts "AT^NDISDUP=1,1,\"cmnet\"\r\n"
+#	         s.expect '^NDISSTAT'
+#	         logit "#405;Modem Dialup"
+#	       }
+#	       `udhcpc -i wwan0`
+#	     else
+#	       # connection should be available   
+#	     end
            end
          end
          l = ''
