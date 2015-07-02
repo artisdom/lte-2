@@ -46,6 +46,8 @@ def dial_it port, interface, server
   `udhcpc -i #{interface}`
   `ip route del default`
   `ip route add #{server} via #{ips[2]} dev #{interface}`
+  # time server
+  `ip route add 202.112.10.36 via #{ips[2]} dev #{interface}`
 end
 
 dial_it(7003, 'wwan0', '119.254.210.30')

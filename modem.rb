@@ -79,6 +79,8 @@ TCPSocket.open('192.168.1.1', port) do |s|
           `udhcpc -i #{interface}`
           `ip route del default`
           `ip route add #{server} via #{ips[2]} dev #{interface}`
+          # time server
+          `ip route add 202.112.10.36 via #{ips[2]} dev #{interface}`
         end
       rescue Exception => e
         logit "#409;Modem Logger Exception;#{e.inspect}"
