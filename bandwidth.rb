@@ -10,7 +10,7 @@ logit "#500;Start Bandwidth;"
 
 if MODE == 'qc'
   loop do
-    `iperf -s -p 9999`
+    `iperf -u -s -p 9999`
   end
 else
   loop do
