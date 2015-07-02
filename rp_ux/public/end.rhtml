@@ -33,6 +33,9 @@
       # save remote logfiles
       `scp "#{QC_IP_1}:/tmp/*.qc.tar.gz" "/mnt/sda1/"`
       `scp "#{QC_IP_2}:/tmp/*.qc.tar.gz" "/mnt/sda1/"`
+      # archive cloud logfiles
+      `ssh #{QC_IP_1} "mv /tmp/*.qc.tar.gz /tmp/archive/"`
+      `ssh #{QC_IP_2} "mv /tmp/*.qc.tar.gz /tmp/archive/"`
     rescue
       @log << '; error during stopping of testrun'
     end
