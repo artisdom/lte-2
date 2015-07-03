@@ -51,9 +51,16 @@ def read_it(s)
   _l
 end
 
+stop_process = false
+trap("TERM") { stop_process = true }
+
 TCPSocket.open('192.168.1.1', port) do |s|
   s.print "AT+CREG=2\r\n"
   loop do
+    if stop_process
+      logit "#411;Stop Modem Logger;#{modem}"
+      break
+    end
     begin
       at_log s, "AT+CREG?", '+CREG: ', 403, 'Modem Cell Tower', modem
       at_log s, "AT^HCSQ?", '^HCSQ:', 404, 'Modem Signal Details', modem
@@ -92,45 +99,3 @@ TCPSocket.open('192.168.1.1', port) do |s|
     end
   end
 end
-
-=begin
-l = ''
-TCPSocket.open('192.168.1.1', port) do |s|
-  # activate cell tower info
-  s.print "AT+CREG=2\r\n"
-  loop do
-    begin
-       begin
-         c = s.read_nonblock(1)
-       rescue
-         retry
-       end
-       if c == "\n"
-         unless l == ''
-           case l
-           when /\^RSSI/
-             a = l.split ':'
-             logit "#401;Modem RSSI;#{a[1].strip};#{modem};"
-           when /\^LTERSRP/
-             a = l.split ':'
-             a = a[1].split ','
-             logit "#402;Modem Signal;#{a[0].strip};#{a[1].strip};#{modem};"
-             s.print "AT+CREG?\r\n"
-           when /^\+CREG/
-             a = l.split ','
-             logit "#403;Modem Cell Tower;#{a[2].strip};#{a[3].strip};#{modem};"
-	     s.print "AT^HCSQ?\r\n"
-	   when /^\^HCSQ:/
-	     a = l
-	     logit "#404;Modem Signal Details;#{a.strip};#{modem};"
-           end
-         end
-         l = ''
-       else
-         l << c
-       end
-    rescue 
-    end 
-  end
-end
-=end

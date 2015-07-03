@@ -83,8 +83,10 @@ if MODE == 'rp'
 end
 
 if MODE == 'rp'
-  # setup lte modem logger
-  commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb"
+  # setup lte modem logger 1
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb 1"
+  # setup lte modem logger 2
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb 2"
 end
 
 if bandwidth >= 1

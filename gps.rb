@@ -7,9 +7,16 @@ port = ARGV[0]
 
 logit "#200;Start GPS Logger;#{port}"
 
+stop_process = false
+trap("TERM") { stop_process = true }
+
 l = ''
 TCPSocket.open('192.168.1.1', 7001) do |s|
   loop do
+    if stop_process
+      logit "#204;Stop GPS Logger;"
+      break
+    end
     begin
        begin
        c = s.read_nonblock(1)

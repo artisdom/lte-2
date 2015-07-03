@@ -24,8 +24,15 @@ if MODE == 'rp'
   socket.send 'poke', 0, SERVER_IP, PORT
 end
 
+stop_process = false
+trap("TERM") { stop_process = true }
+
 last_poke = Time.now
 loop do
+  if stop_process
+    logit "#005;Stop Receiver;#{PORT}"
+    break
+  end
   # every minute poke the firewall
   if ((Time.now - last_poke) > 60) and MODE == 'rp'
     logit "#004;Re-Poke firewall"
