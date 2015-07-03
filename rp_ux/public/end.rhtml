@@ -27,17 +27,45 @@
       `ssh #{QC_IP_2} "kill -TERM #{r_pid}"`
 
       # wait to write the logfiles down
-      sleep 5
+      5.times do
+        result = `cat /tmp/testrun.state`
+        if result == 'end'
+          `echo "[\`date\`] Webserver: end local testrun detected" >> /tmp/webserver.log`
+          break
+        end
+      end
+      5.times do
+        sleep 1
+        result = `ssh #{QC_IP_1} "cat /tmp/testrun.state"`
+        if result == 'end'
+          `echo "[\`date\`] Webserver: end QC1 testrun detected" >> /tmp/webserver.log`
+          break
+        end
+      end
+      5.times do
+        sleep 1
+        result = `ssh #{QC_IP_2} "cat /tmp/testrun.state"`
+        if result == 'end'
+          `echo "[\`date\`] Webserver: end QC1 testrun detected" >> /tmp/webserver.log`
+          break
+        end
+      end
+
       # save local logfiles
+      `echo "[\`date\`] Webserver: move local logfiles" >> /tmp/webserver.log`
       `mv /tmp/*.rp.0.tar.gz /mnt/sda1/`
       # save remote logfiles
       `scp "#{QC_IP_1}:/tmp/*.qc.1.tar.gz" "/mnt/sda1/"`
+      `echo "[\`date\`] Webserver: copy QC1 logfiles" >> /tmp/webserver.log`
       `scp "#{QC_IP_2}:/tmp/*.qc.2.tar.gz" "/mnt/sda1/"`
+      `echo "[\`date\`] Webserver: copy QC2 logfiles" >> /tmp/webserver.log`
       # archive cloud logfiles
       `ssh #{QC_IP_1} "mv /tmp/*.qc.1.tar.gz /tmp/archive/"`
       `ssh #{QC_IP_2} "mv /tmp/*.qc.2.tar.gz /tmp/archive/"`
-    rescue
+      `echo "[\`date\`] Webserver: archive remote logfiles" >> /tmp/webserver.log`
+    rescue Exception => e
       @log << '; error during stopping of testrun'
+      `echo "[\`date\`] Webserver: exception while stopping testrun; #{e.inspect}" >> /tmp/webserver.log`
     end
   end
 %>

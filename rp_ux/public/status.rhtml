@@ -52,18 +52,27 @@
     5.times do
       sleep 1
       result = `ssh #{QC_IP_1} "cat /tmp/testrun.state"`
-      break if result == 'running'
+      if result == 'running'
+        `echo "[\`date\`] Webserver: started QC1 testrun detected" >> /tmp/webserver.log`
+        break
+      end
     end
     5.times do
       sleep 1
       result = `ssh #{QC_IP_2} "cat /tmp/testrun.state"`
-      break if result == 'running'
+      if result == 'running'
+        `echo "[\`date\`] Webserver: started QC2 testrun detected" >> /tmp/webserver.log`
+        break
+      end
     end
     # start local testrun
     `/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 #{QC_IP_1} #{QC_IP_2}  </dev/null >/dev/null 2>&1 &`
     5.times do
       result = `cat /tmp/testrun.state`
-      break if result == 'running'
+      if result == 'running'
+        `echo "[\`date\`] Webserver: started local testrun detected" >> /tmp/webserver.log`
+        break
+      end
     end
   rescue
     @log << '; error during deployment of testconfig in remote location'
