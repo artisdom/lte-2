@@ -103,27 +103,40 @@ commands.each do |cmd|
   logit "#305;Spawn Process;#{p};#{cmd}"
 end
 
+stop_process = false
 trap('TERM') do
   logit '#301;Kill all processes'
   pids.each do |pro|
     logit "#304;Kill one process;#{pro}"
     Process.kill('TERM', pro)
   end
+  stop_process = true
 end
 
-pids.each do |p|
-  logit "#302;Waiting for Process;#{p}"
-  Process.waitpid(p)
+loop do
+  if stop_process
+    logit "#302;Shutdown testrun Process"\
+    break
+  end
+  sleep 1
 end
 
-File.open("/tmp/testrun.state", 'w') do |f|
-  f.print 'packing'
-end
+# rest a moment before packing everything
+sleep 5
 
-package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.#{MODE}.#{SERVER_IDX}.tar.gz"
-logit "#303;Pack logresults;#{package}"
-`tar czf "#{package}" /tmp/lte_test.log #{CONFIG}`
+begin
+  File.open("/tmp/testrun.state", 'w') do |f|
+    f.print 'packing'
+  end
 
-File.open("/tmp/testrun.state", 'w') do |f|
-  f.print 'end'
+  package = "/tmp/#{Time.now.strftime("%Y-%m-%d--%H-%M-%S.%L")}_#{testid}.#{MODE}.#{SERVER_IDX}.tar.gz"
+  logit "#303;Pack logresults;#{package}"
+  `tar czf "#{package}" /tmp/lte_test.log #{CONFIG}`
+
+  File.open("/tmp/testrun.state", 'w') do |f|
+    f.print 'end'
+  end
+rescue Exception => e
+  logit "#304;Error during packing of testrun results;#{e.inspect}"
+  puts e.inspect
 end
