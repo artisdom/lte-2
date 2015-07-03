@@ -87,20 +87,10 @@ if MODE == 'rp'
   commands << "#{File.dirname(File.expand_path(__FILE__))}/modem.rb"
 end
 
-if bandwidth == 1
+if bandwidth >= 1
   # Bandwidth test
-  commands << "#{File.dirname(File.expand_path(__FILE__))}/bandwidth.rb #{MODE}"
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/bandwidth.rb #{MODE} #{bandwidth}"
 end
-
-=begin
-# we don't need the dial in, we dial up before the start
-if MODE == 'rp'
-  # dial up modem
-  cmd = "#{File.dirname(File.expand_path(__FILE__))}/dial.rb"
-  `#{cmd}`
-  logit "#306;Dialup modem;#{cmd}"
-end
-=end
 
 # start all proccesses
 pids = []
