@@ -115,7 +115,7 @@ end
 
 loop do
   if stop_process
-    logit "#302;Shutdown testrun Process"\
+    logit "#302;Shutdown testrun Process"
     break
   end
   sleep 1
