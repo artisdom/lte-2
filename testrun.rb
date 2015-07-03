@@ -113,6 +113,10 @@ trap('TERM') do
   stop_process = true
 end
 
+File.open("/tmp/testrun.state", 'w') do |f|
+  f.print 'running'
+end
+
 loop do
   if stop_process
     logit "#302;Shutdown testrun Process"

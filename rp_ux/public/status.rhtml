@@ -45,11 +45,26 @@
     `scp "/tmp/testrun.json" "#{QC_IP_1}:/tmp/"`
     `scp "/tmp/testrun.json" "#{QC_IP_2}:/tmp/"`
     # start remote testrun
-    spawn("ssh #{QC_IP_1} \"/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2} \"")
-    spawn("ssh #{QC_IP_2} \"/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 2 #{QC_IP_1} #{QC_IP_2} \"")
-    sleep 10
+    #spawn("ssh #{QC_IP_1} \"/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2} \"")
+    #spawn("ssh #{QC_IP_2} \"/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 2 #{QC_IP_1} #{QC_IP_2} \"")
+    `ssh #{QC_IP_1} "(/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 1 #{QC_IP_1} #{QC_IP_2}) </dev/null >/dev/null 2>&1 &"`
+    `ssh #{QC_IP_2} "(/usr/bin/ruby /root/lte/testrun.rb /tmp/testrun.json qc 2 #{QC_IP_1} #{QC_IP_2}) </dev/null >/dev/null 2>&1 &"`
+    5.times do
+      sleep 1
+      result = `ssh #{QC_IP_1} "cat /tmp/testrun.state"`
+      break if result == 'running'
+    end
+    5.times do
+      sleep 1
+      result = `ssh #{QC_IP_2} "cat /tmp/testrun.state"`
+      break if result == 'running'
+    end
     # start local testrun
-    spawn("/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 #{QC_IP_1} #{QC_IP_2}")
+    `/usr/bin/ruby /app/lte/testrun.rb /tmp/testrun.json rp 0 #{QC_IP_1} #{QC_IP_2}  </dev/null >/dev/null 2>&1 &`
+    5.times do
+      result = `cat /tmp/testrun.state`
+      break if result == 'running'
+    end
   rescue
     @log << '; error during deployment of testconfig in remote location'
   end

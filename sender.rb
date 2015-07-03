@@ -33,16 +33,9 @@ c=0
 target_ip = SERVER_IP
 target_port = TARGET_PORT
 
-stop_process = false
-trap("TERM") { stop_process = true }
-
 if MODE == 'qc'
   socket.bind '', TARGET_PORT
   loop do
-    if stop_process
-      logit "#103;Stop Sender while waiting for poke;#{TARGET_PORT}"
-      break
-    end
     begin
       msg, sender_inet_addr = socket.recvfrom_nonblock(1500)
       if msg == 'poke'
@@ -59,10 +52,6 @@ if MODE == 'qc'
 end
 
 loop do
-  if stop_process
-    logit "#104;Stop Sender;#{TARGET_PORT}"
-    break
-  end
   c+=1
   socket.send (c.to_s.rjust(20,'0') + stream_id + content), 0, target_ip, target_port
   logit "#101;Send UDP Telegram;#{c};#{PKG_SIZE};#{target_ip};#{target_port}"
