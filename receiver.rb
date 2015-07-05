@@ -17,7 +17,12 @@ raise ArgumentError.new('wrong mode') unless MODE == 'rp' or MODE == 'qc'
 logit "#000;Start Receiver;#{PORT}"
 
 socket = UDPSocket.new
-socket.bind '0.0.0.0', PORT
+begin
+  socket.bind '0.0.0.0', PORT
+rescue Errno::EADDRINUSE
+  logit '#005;Address already in use'
+  exit
+end
 
 if MODE == 'rp'
   logit "#003;Poke firewall"

@@ -34,7 +34,12 @@ target_ip = SERVER_IP
 target_port = TARGET_PORT
 
 if MODE == 'qc'
-  socket.bind '', TARGET_PORT
+  begin
+    socket.bind '', TARGET_PORT
+  rescue Errno::EADDRINUSE
+    logit '#104;Address already in use'
+    exit
+  end
   loop do
     begin
       msg, sender_inet_addr = socket.recvfrom_nonblock(1500)
