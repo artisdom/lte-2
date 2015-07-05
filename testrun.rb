@@ -94,6 +94,11 @@ if bandwidth >= 1
   commands << "#{File.dirname(File.expand_path(__FILE__))}/bandwidth.rb #{MODE} #{bandwidth}"
 end
 
+if MODE == 'rp'
+  # setup ping logger
+  commands << "#{File.dirname(File.expand_path(__FILE__))}/ping.rb"
+end
+
 # start all proccesses
 pids = []
 commands.each do |cmd|
